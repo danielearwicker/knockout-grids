@@ -2,8 +2,6 @@
 <html>
 <head>
     <title>Grid</title>
-    <script src="jquery-1.10.2.js" language="javascript"></script>
-    <script src="jquery.mousewheel.js" language="javascript"></script>
     <script src="knockout-2.3.0.debug.js" language="javascript"></script>
     <script src="bindings.js" language="javascript"></script>
     <script src="bundle.js" language="javascript"></script>
@@ -56,7 +54,7 @@
         }
 
         .rows {
-            overflow: hidden;
+            overflow: auto;
             border-style: none solid solid solid;
         }
 
@@ -84,6 +82,7 @@
 
         .row, .header {
             white-space: nowrap;
+            position: absolute;
         }
 
         .column, .cell {
@@ -113,24 +112,19 @@
         </div><!-- /ko -->
         </div>
 
-        <div class="rows"
-             data-bind="scroll: { left: scrollLeft }, size: { height: visibleRowsHeight }, mouseWheel: { x: scrollLeft, minX: 0, maxX: horizontalRange, y: rowOffset, minY: 0, maxY: verticalRange }">
-            <!-- ko foreach: rows -->
-            <div class="row" data-bind="style: { height: $parent.rowHeight()+'px' }">
-                <!-- ko foreach: $parent.columns --><div class="cell"
-                                                         data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
-            </div><!-- /ko -->
+        <div class="rows" data-bind="scroll: { left: scrollLeft, top: scrollTop }, size: { height: visibleRowsHeight }">
+            <div class="space"
+                 data-bind="style: { height: spaceHeight() }">
+                <!-- ko foreach: rows -->
+                <div class="row" data-bind="style: { top: $parent.getRowTop($index())+'px', height: $parent.rowHeight()+'px' }">
+                    <!-- ko foreach: $parent.columns --><div class="cell"
+                        data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
+                    </div><!-- /ko -->
+                </div>
+                <!-- /ko -->
             </div>
-            <!-- /ko -->
         </div>
 
-        <div class="vscroll" data-bind="scroll: { top: vScroll }, size: { height: vViewport }">
-            <div class="padding" data-bind="style: { height: vPadding()+'px' }"></div>
-        </div>
-
-        <div class="hscroll" data-bind="scroll: { left: hScroll }, size: { width: hViewport }">
-            <div class="padding" data-bind="style: { width: hPadding()+'px' }"></div>
-        </div>
     </div>
 
     <div class="status">

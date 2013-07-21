@@ -24,22 +24,6 @@ ko.bindingHandlers.scroll = {
     }
 };
 
-ko.bindingHandlers.mouseWheel = {
-    'init': function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-
-        var params = valueAccessor();
-
-        $(element).mousewheel(function(event, delta, deltaX, deltaY) {
-            if (ko.isObservable(params.x)) {
-                params.x(Math.max(ko.unwrap(params.minX), Math.min(ko.unwrap(params.maxX), params.x() + deltaX)));
-            }
-            if (ko.isObservable(params.y)) {
-                params.y(Math.max(ko.unwrap(params.minY), Math.min(ko.unwrap(params.maxY), params.y() - deltaY)));
-            }
-        });
-    }
-};
-
 ko.bindingHandlers.size = {
     'init': function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 

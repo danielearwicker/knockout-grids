@@ -1,6 +1,4 @@
 
-
-
 window.onload = function() {
 
     var columns = [
@@ -31,78 +29,46 @@ window.onload = function() {
     var viewModel = {
         columns: columns,
 
-        rowOffset: ko.observable(0),
-        rowCount: ko.observable(1000000000),
+        rowCount: ko.observable(10000000),
 
         rowHeight: ko.observable(24),
         visibleRowsHeight: ko.observable(0),
 
         scrollLeft: ko.observable(0),
-
-        vViewport: ko.observable(0),
-        hViewport: ko.observable(0)
+        scrollTop: ko.observable(0)
     };
 
     viewModel.visibleRows = ko.computed(function() {
         return Math.ceil(viewModel.visibleRowsHeight() / viewModel.rowHeight());
     });
 
-    viewModel.verticalRange = ko.computed(function() {
+    var range = ko.computed(function() {
         return viewModel.rowCount() - viewModel.visibleRows();
     });
 
-    viewModel.vPadding = ko.computed(function() {
-        return Math.min(100000, Math.max(viewModel.vViewport(),
-            viewModel.rowHeight() * viewModel.verticalRange()));
+    viewModel.spaceHeight = ko.computed(function() {
+        return (viewModel.visibleRowsHeight() + range() + 1) + 'px';
     });
 
-    viewModel.vScroll = ko.computed({
-        read: function() {
-            var proportion = viewModel.rowOffset() / viewModel.verticalRange();
-            return Math.round(proportion * (viewModel.vPadding() - viewModel.vViewport()));
-        }, write: function(v) {
-            var proportion = v / (viewModel.vPadding() - viewModel.vViewport());
-            viewModel.rowOffset(Math.round(viewModel.verticalRange() * proportion));
-        }
+    viewModel.rowOffset = ko.computed(function() {
+        return viewModel.scrollTop();
     });
 
-    viewModel.allColumnsWidth = ko.computed(function() {
-        return viewModel.columns.map(function(c) {
-            return ko.unwrap(c.width);
-        }).reduce(function(l, r) {
-            return l + r;
-        });
-    });
-
-    viewModel.horizontalRange = ko.computed(function() {
-        return Math.max(0, viewModel.allColumnsWidth() - viewModel.hViewport());
-    });
-
-    viewModel.hPadding = ko.computed(function() {
-        return viewModel.hViewport() + viewModel.horizontalRange();
-    });
-
-    viewModel.hScroll = ko.computed({
-        read: function() {
-            var proportion = viewModel.scrollLeft() / viewModel.horizontalRange();
-            return Math.round(proportion * (viewModel.hPadding() - viewModel.hViewport()));
-        }, write: function(v) {
-            var proportion = v / (viewModel.hPadding() - viewModel.hViewport());
-            viewModel.scrollLeft(Math.round(viewModel.horizontalRange() * proportion));
-        }
-    });
+    viewModel.getRowTop = function(index) {
+        return (index * viewModel.rowHeight()) + viewModel.scrollTop();
+    };
 
     viewModel.rows = ko.computed(function() {
 
         var rows = [];
-        var end = viewModel.rowOffset() + viewModel.visibleRows();
-        for (var r = viewModel.rowOffset(); r < end; r++) {
+        var last = Math.min(viewModel.rowCount() - 1, viewModel.rowOffset() + viewModel.visibleRows());
+        for (var r = viewModel.rowOffset(); r <= last; r++) {
             rows.push(makeRow(r));
         }
 
         return rows;
 
-    }).extend({ throttle: 10});
+    }).extend({ throttle: 10 });
 
     ko.applyBindings(viewModel);
 };
