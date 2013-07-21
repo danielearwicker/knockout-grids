@@ -55,17 +55,26 @@
 <body>
 
     <div class="header" data-bind="scroll: { left: scrollLeft }">
-        <!-- ko foreach: columns --><div class="column"
-            data-bind="style: { width: ko.unwrap(width)+'px' }, text: label">
+        <!-- ko foreach: columns --><div class="column" data-bind="style: { width: ko.unwrap(width)+'px' }">
+            <div class="label" data-bind="text: label"></div>
+            <div class="resizer"></div>
         </div><!-- /ko -->
     </div>
 
-    <div class="grid" data-bind="scroll: { left: scrollLeft }, foreach: rows">
+    <div class="grid" data-bind="scroll: { left: scrollLeft, top: scrollTop }, size: { height: gridHeight }">
+
+        <div class="padding" data-bind="style: { height: paddingTop()+'px' }"></div>
+
+        <!-- ko foreach: rows -->
         <div class="row" data-bind="style: { height: $parent.rowHeight()+'px' }">
             <!-- ko foreach: $parent.columns --><div class="cell"
                 data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
             </div><!-- /ko -->
         </div>
+        <!-- /ko -->
+
+        <div class="padding" data-bind="style: { height: paddingBottom()+'px' }"></div>
+
     </div>
 
 </body>
