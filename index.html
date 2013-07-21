@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grid</title>
+    <script src="knockout-2.3.0.debug.js" language="javascript"></script>
+    <script src="bindings.js" language="javascript"></script>
+    <script src="bundle.js" language="javascript"></script>
+    <style>
+
+        * {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10pt;
+        }
+
+        .header, .column, .grid, .cell {
+            border: 1px silver;
+        }
+
+        .grid, .header {
+            width: 250px;
+        }
+
+        .grid {
+            height: 400px;
+            border-style: none solid solid solid;
+            overflow: auto;
+        }
+
+        .row, .header {
+            white-space: nowrap;
+        }
+
+        .column, .cell {
+            display: inline-block;
+            padding: 4px;
+        }
+
+        .cell {
+            border-style: none solid solid none;
+        }
+
+        .header {
+            width: 250px;
+            border-style: solid;
+            overflow: hidden;
+        }
+
+        .column {
+            border-right-style: solid;
+            background: #b0e0e6;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header" data-bind="scroll: { left: scrollLeft }">
+        <!-- ko foreach: columns --><div class="column"
+            data-bind="style: { width: ko.unwrap(width)+'px' }, text: label">
+        </div><!-- /ko -->
+    </div>
+
+    <div class="grid" data-bind="scroll: { left: scrollLeft }, foreach: rows">
+        <div class="row" data-bind="style: { height: $parent.rowHeight()+'px' }">
+            <!-- ko foreach: $parent.columns --><div class="cell"
+                data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
+            </div><!-- /ko -->
+        </div>
+    </div>
+
+</body>
+</html>
