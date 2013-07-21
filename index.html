@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Grid</title>
+    <script src="jquery-1.10.2.js" language="javascript"></script>
+    <script src="jquery.mousewheel.js" language="javascript"></script>
     <script src="knockout-2.3.0.debug.js" language="javascript"></script>
     <script src="bindings.js" language="javascript"></script>
     <script src="bundle.js" language="javascript"></script>
@@ -12,18 +14,72 @@
             font-size: 10pt;
         }
 
-        .header, .column, .grid, .cell {
+        .grid, .status, header, .rows, .vscroll, .hscroll {
+            position: absolute;
+        }
+
+        .grid, .status {
+            left: 0;
+            right: 0;
+        }
+
+        .header, .column, .rows, .cell {
             border: 1px silver;
         }
 
-        .grid, .header {
-            width: 250px;
+        .grid {
+            top: 0;
+            bottom: 24px;
         }
 
-        .grid {
-            height: 400px;
+        .status {
+            bottom: 0;
+            height: 24px;
+            background: silver;
+        }
+
+        .header, .rows, .hscroll {
+            left: 0;
+            right: 16px;
+        }
+
+        .header {
+            top: 0;
+            height: 23px;
+            border-style: solid;
+            overflow: hidden;
+        }
+
+        .rows, .vscroll {
+            top: 23px;
+            bottom: 16px;
+        }
+
+        .rows {
+            overflow: hidden;
             border-style: none solid solid solid;
+        }
+
+        .vscroll {
             overflow: auto;
+            right: 0;
+            width: 16px;
+        }
+
+        .vscroll .padding {
+            position: relative;
+            width: 5px;
+        }
+
+        .hscroll {
+            overflow: auto;
+            bottom: 0;
+            height: 16px;
+        }
+
+        .hscroll .padding {
+            position: relative;
+            height: 5px;
         }
 
         .row, .header {
@@ -39,12 +95,6 @@
             border-style: none solid solid none;
         }
 
-        .header {
-            width: 250px;
-            border-style: solid;
-            overflow: hidden;
-        }
-
         .column {
             border-right-style: solid;
             background: #b0e0e6;
@@ -54,27 +104,38 @@
 </head>
 <body>
 
-    <div class="header" data-bind="scroll: { left: scrollLeft }">
-        <!-- ko foreach: columns --><div class="column" data-bind="style: { width: ko.unwrap(width)+'px' }">
+    <div class="grid">
+
+        <div class="header" data-bind="scroll: { left: scrollLeft }">
+            <!-- ko foreach: columns --><div class="column" data-bind="style: { width: ko.unwrap(width)+'px' }">
             <div class="label" data-bind="text: label"></div>
             <div class="resizer"></div>
         </div><!-- /ko -->
+        </div>
+
+        <div class="rows"
+             data-bind="scroll: { left: scrollLeft }, size: { height: visibleRowsHeight }, mouseWheel: { x: scrollLeft, minX: 0, maxX: horizontalRange, y: rowOffset, minY: 0, maxY: verticalRange }">
+            <!-- ko foreach: rows -->
+            <div class="row" data-bind="style: { height: $parent.rowHeight()+'px' }">
+                <!-- ko foreach: $parent.columns --><div class="cell"
+                                                         data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
+            </div><!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+
+        <div class="vscroll" data-bind="scroll: { top: vScroll }, size: { height: vViewport }">
+            <div class="padding" data-bind="style: { height: vPadding()+'px' }"></div>
+        </div>
+
+        <div class="hscroll" data-bind="scroll: { left: hScroll }, size: { width: hViewport }">
+            <div class="padding" data-bind="style: { width: hPadding()+'px' }"></div>
+        </div>
     </div>
 
-    <div class="grid" data-bind="scroll: { left: scrollLeft, top: scrollTop }, size: { height: gridHeight }">
-
-        <div class="padding" data-bind="style: { height: paddingTop()+'px' }"></div>
-
-        <!-- ko foreach: rows -->
-        <div class="row" data-bind="style: { height: $parent.rowHeight()+'px' }">
-            <!-- ko foreach: $parent.columns --><div class="cell"
-                data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
-            </div><!-- /ko -->
-        </div>
-        <!-- /ko -->
-
-        <div class="padding" data-bind="style: { height: paddingBottom()+'px' }"></div>
-
+    <div class="status">
+        Showing rows <span data-bind="text: rowOffset"></span>-<span data-bind="text: rowOffset() + visibleRows()"></span>
+        of <span data-bind="text: rowCount"></span>
     </div>
 
 </body>
