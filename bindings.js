@@ -1,3 +1,4 @@
+var ko = require('knockout');
 
 ko.bindingHandlers.scroll = {
     'init': function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
@@ -49,10 +50,10 @@ ko.bindingHandlers.htmlTemplate = {
     'init': function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         ko.computed(function() {
             var params = ko.unwrap(valueAccessor());
-            var html = (params ? ko.unwrap(params.html) : null) || '';
-            var data = (params ? ko.unwrap(params.data) : null) || {};
-            ko.utils.setHtml(element, html);
-            ko.applyBindingsToDescendants(bindingContext.createChildContext(data), element);
+            var view = (params ? ko.unwrap(params.view) : null) || '';
+            var model = (params ? ko.unwrap(params.model) : null) || {};
+            ko.utils.setHtml(element, view);
+            ko.applyBindingsToDescendants(bindingContext.createChildContext(model), element);
         });
         return { controlsDescendantBindings: true };
     }

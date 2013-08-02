@@ -1,0 +1,9 @@
+{
+  "name": "earwicker-client-grids",
+  "version": "0.1.0",
+  "dependencies": {
+	"knockout": "2.3.x",
+        "webmake": ">=0.3.19",
+        "express": "3.3.4"
+  }
+}

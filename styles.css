@@ -1,0 +1,81 @@
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+}
+
+.grid, .status, header, .rows {
+    position: absolute;
+}
+
+.grid, .status {
+    left: 0;
+    right: 0;
+}
+
+.header, .column, .rows, .cell {
+    border: 1px silver;
+}
+
+.grid {
+    top: 0;
+    bottom: 24px;
+}
+
+.status {
+    bottom: 0;
+    height: 24px;
+    background: silver;
+}
+
+.header, .rows {
+    left: 0;
+    right: 0;
+}
+
+.header {
+    top: 0;
+    height: 23px;
+    border-style: solid;
+    overflow: hidden;
+}
+
+.rows {
+    top: 23px;
+    bottom: 0;
+}
+
+.rows {
+    overflow: auto;
+    border-style: none solid solid solid;
+}
+
+.row, .header {
+    white-space: nowrap;
+    position: absolute;
+}
+
+.column, .cell, .columnPadding {
+    display: inline-block;
+    padding: 4px;
+}
+
+.cell {
+    border-style: none solid solid none;
+}
+
+.cell.selectedColumn {
+    background: #b0e0e6;
+}
+
+.cell.selectedRow {
+    background: #b0e0e6;
+}
+
+.cell.selectedRow.selectedColumn {
+    background: skyblue;
+}
+
+.column {
+    border-right-style: solid;
+    background: #b0e0e6;
+}

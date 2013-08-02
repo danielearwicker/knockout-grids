@@ -2,134 +2,19 @@
 <html>
 <head>
     <title>Grid</title>
-    <script src="knockout-2.3.0.debug.js" language="javascript"></script>
-    <script src="bindings.js" language="javascript"></script>
+
     <script src="bundle.js" language="javascript"></script>
-    <style>
 
-        * {
-            font-family: Helvetica, Arial, sans-serif;
-            font-size: 10pt;
-        }
+    <link rel="stylesheet" type="text/css" href="styles.css" />
 
-        .grid, .status, header, .rows, .vscroll, .hscroll {
-            position: absolute;
-        }
-
-        .grid, .status {
-            left: 0;
-            right: 0;
-        }
-
-        .header, .column, .rows, .cell {
-            border: 1px silver;
-        }
-
-        .grid {
-            top: 0;
-            bottom: 24px;
-        }
-
-        .status {
-            bottom: 0;
-            height: 24px;
-            background: silver;
-        }
-
-        .header, .rows, .hscroll {
-            left: 0;
-            right: 16px;
-        }
-
-        .header {
-            top: 0;
-            height: 23px;
-            border-style: solid;
-            overflow: hidden;
-        }
-
-        .rows, .vscroll {
-            top: 23px;
-            bottom: 16px;
-        }
-
-        .rows {
-            overflow: auto;
-            border-style: none solid solid solid;
-        }
-
-        .vscroll {
-            overflow: auto;
-            right: 0;
-            width: 16px;
-        }
-
-        .vscroll .padding {
-            position: relative;
-            width: 5px;
-        }
-
-        .hscroll {
-            overflow: auto;
-            bottom: 0;
-            height: 16px;
-        }
-
-        .hscroll .padding {
-            position: relative;
-            height: 5px;
-        }
-
-        .row, .header {
-            white-space: nowrap;
-            position: absolute;
-        }
-
-        .column, .cell {
-            display: inline-block;
-            padding: 4px;
-        }
-
-        .cell {
-            border-style: none solid solid none;
-        }
-
-        .column {
-            border-right-style: solid;
-            background: #b0e0e6;
-        }
-
-    </style>
 </head>
 <body>
 
-    <div class="grid">
-
-        <div class="header" data-bind="scroll: { left: scrollLeft }">
-            <!-- ko foreach: columns --><div class="column" data-bind="style: { width: ko.unwrap(width)+'px' }">
-            <div class="label" data-bind="text: label"></div>
-            <div class="resizer"></div>
-        </div><!-- /ko -->
-        </div>
-
-        <div class="rows" data-bind="scroll: { left: scrollLeft, top: scrollTop }, size: { height: visibleRowsHeight }">
-            <div class="space"
-                 data-bind="style: { height: spaceHeight() }">
-                <!-- ko foreach: rows -->
-                <div class="row" data-bind="style: { top: $parent.getRowTop($index())+'px', height: $parent.rowHeight()+'px' }">
-                    <!-- ko foreach: $parent.columns --><div class="cell"
-                        data-bind="style: { width: ko.unwrap(width)+'px' }, htmlTemplate: { html: template, data: $parent }">
-                    </div><!-- /ko -->
-                </div>
-                <!-- /ko -->
-            </div>
-        </div>
-
-    </div>
+    <div data-bind="htmlTemplate: grid"></div>
 
     <div class="status">
-        Showing rows <span data-bind="text: rowOffset"></span>-<span data-bind="text: rowOffset() + visibleRows()"></span>
-        of <span data-bind="text: rowCount"></span>
+        Showing rows <span data-bind="text: grid.model.rowOffset"></span>-<span data-bind="text: grid.model.rowOffset() + grid.model.visibleRows()"></span>
+        of <span data-bind="text: grid.model.rowCount"></span>
     </div>
 
 </body>

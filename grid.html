@@ -1,0 +1,38 @@
+<div class="grid">
+
+    <div class="header" data-bind="scroll: { left: scrollLeft }">
+        <!-- ko foreach: columns --><div class="column" data-bind="style: { width: ko.unwrap(width)+'px' }">
+            <div class="label" data-bind="text: label"></div>
+            <div class="resizer"></div>
+        </div><!-- /ko -->
+        <div class="columnPadding" style="width: 32px;">&nbsp;</div>
+    </div>
+
+    <div class="rows" data-bind="scroll: { left: scrollLeft, top: scrollTop }, size: { height: visibleRowsHeight }">
+        <div class="space"
+             data-bind="style: { height: spaceHeight() }">
+            <!-- ko foreach: rows -->
+            <div class="row" data-bind="style: { top: $parent.getRowTop($index())+'px', height: $parent.rowHeight()+'px' }">
+                <!-- ko foreach: $parent.columns --><div class="cell"
+                    data-bind="style: {
+                                    width: ko.unwrap(width)+'px',
+                                    height: $parentContext.$parent.rowHeight()+'px'
+                               },
+                               css: {
+                                    selectedColumn: $index() === $parentContext.$parent.selectedCell().x,
+                                    selectedRow: $parentContext.$index() ===
+                                        ($parentContext.$parent.selectedCell().y -
+                                         $parentContext.$parent.rowOffset())
+                               },
+                               htmlTemplate: { view: template, model: $parent },
+                               click: function() {
+                                    $parentContext.$parent.cellClicked($index(), $parentContext.$index())
+                               }
+                              ">
+                </div><!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+
+</div>

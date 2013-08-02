@@ -1,3 +1,7 @@
+var ko = require('knockout');
+var grid = require('./grid');
+
+require('./bindings.js');
 
 window.onload = function() {
 
@@ -27,48 +31,8 @@ window.onload = function() {
     }
 
     var viewModel = {
-        columns: columns,
-
-        rowCount: ko.observable(10000000),
-
-        rowHeight: ko.observable(24),
-        visibleRowsHeight: ko.observable(0),
-
-        scrollLeft: ko.observable(0),
-        scrollTop: ko.observable(0)
+        grid: grid(columns, makeRow)
     };
-
-    viewModel.visibleRows = ko.computed(function() {
-        return Math.ceil(viewModel.visibleRowsHeight() / viewModel.rowHeight());
-    });
-
-    var range = ko.computed(function() {
-        return viewModel.rowCount() - viewModel.visibleRows();
-    });
-
-    viewModel.spaceHeight = ko.computed(function() {
-        return (viewModel.visibleRowsHeight() + range() + 1) + 'px';
-    });
-
-    viewModel.rowOffset = ko.computed(function() {
-        return viewModel.scrollTop();
-    });
-
-    viewModel.getRowTop = function(index) {
-        return (index * viewModel.rowHeight()) + viewModel.scrollTop();
-    };
-
-    viewModel.rows = ko.computed(function() {
-
-        var rows = [];
-        var last = Math.min(viewModel.rowCount() - 1, viewModel.rowOffset() + viewModel.visibleRows());
-        for (var r = viewModel.rowOffset(); r <= last; r++) {
-            rows.push(makeRow(r));
-        }
-
-        return rows;
-
-    }).extend({ throttle: 10 });
 
     ko.applyBindings(viewModel);
 };
