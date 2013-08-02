@@ -8,8 +8,8 @@
 }
 
 .grid, .status {
-    left: 0;
-    right: 0;
+    left: 20px;
+    right: 20px;
 }
 
 .header, .column, .rows, .cell {
@@ -17,12 +17,13 @@
 }
 
 .grid {
-    top: 0;
-    bottom: 24px;
+    top: 20px;
+    bottom: 44px;
+    border: 1px solid silver;
 }
 
 .status {
-    bottom: 0;
+    bottom: 20px;
     height: 24px;
     background: silver;
 }
@@ -34,19 +35,16 @@
 
 .header {
     top: 0;
-    height: 23px;
-    border-style: solid;
+
     overflow: hidden;
 }
 
 .rows {
-    top: 23px;
     bottom: 0;
 }
 
 .rows {
     overflow: auto;
-    border-style: none solid solid solid;
 }
 
 .row, .header {
@@ -56,11 +54,14 @@
 
 .column, .cell, .columnPadding {
     display: inline-block;
-    padding: 4px;
 }
 
 .cell {
     border-style: none solid solid none;
+}
+
+.cell > *, .label {
+    padding: 4px;
 }
 
 .cell.selectedColumn {
@@ -77,5 +78,5 @@
 
 .column {
     border-right-style: solid;
-    background: #b0e0e6;
+    background: #eee8aa;
 }

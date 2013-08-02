@@ -8,7 +8,7 @@ exports = module.exports = function(columns, makeRow) {
 
         rowCount: ko.observable(10000000),
 
-        rowHeight: ko.observable(30),
+        rowHeight: ko.observable(26),
         visibleRowsHeight: ko.observable(0),
 
         scrollLeft: ko.observable(0),
@@ -54,6 +54,36 @@ exports = module.exports = function(columns, makeRow) {
             x: columnIndex,
             y: rowIndexMinusOffset + gridModel.rowOffset()
         });
+    };
+
+    gridModel.keyPressed = function(data, evt) {
+        var s = gridModel.selectedCell();
+        switch (evt.which) {
+            case 37: // left
+                gridModel.selectedCell({
+                    x: s.x - 1,
+                    y: s.y
+                });
+                break;
+            case 39: // right
+                gridModel.selectedCell({
+                    x: s.x + 1,
+                    y: s.y
+                });
+                break;
+            case 38: // up
+                gridModel.selectedCell({
+                    x: s.x,
+                    y: s.y - 1
+                });
+                break;
+            case 40: // down
+                gridModel.selectedCell({
+                    x: s.x,
+                    y: s.y + 1
+                });
+                break;
+        }
     };
 
     return {

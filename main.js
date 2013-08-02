@@ -6,11 +6,11 @@ require('./bindings.js');
 window.onload = function() {
 
     var columns = [
-        { label: 'ID', template: '<span data-bind="text: id"></span>', width: 70 },
-        { label: 'First name', template: '<span data-bind="text: firstName"></span>', width: 120 },
-        { label: 'Middle name', template: '<span data-bind="text: middleName"></span>', width: 120 },
-        { label: 'Last name', template: '<span data-bind="text: lastName"></span>', width: 160 },
-        { label: 'Full name', template: '<span data-bind="text: firstName + \' \' + middleName + \' \' + lastName"></span>', width: 220 }
+        { label: 'ID', template: '<div data-bind="text: id"></div>', width: 70 },
+        { label: 'First name', template: '<div data-bind="text: firstName"></div>', width: 120 },
+        { label: 'Middle name', template: '<div data-bind="text: middleName"></div>', width: 120 },
+        { label: 'Last name', template: '<div data-bind="text: lastName"></div>', width: 160 },
+        { label: 'Full name', template: '<div data-bind="text: firstName + \' \' + middleName + \' \' + lastName"></div>', width: 220 }
     ];
 
     var firstNames = ['Homer', 'Marge', 'Bart', 'Lisa', 'Maggie', 'Moe', 'Barney', 'Carl', 'Lenny', 'Ned', 'Milhouse'];
