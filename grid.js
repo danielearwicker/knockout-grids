@@ -29,12 +29,18 @@ exports = module.exports = function(columns, makeRow) {
         return (gridModel.visibleRowsHeight() + range() + 1) + 'px';
     });
 
-    gridModel.rowOffset = ko.computed(function() {
-        return gridModel.scrollTop();
-    });
+    gridModel.rowOffset = gridModel.scrollTop;
 
     gridModel.getRowTop = function(index) {
         return (index * gridModel.rowHeight()) + gridModel.scrollTop();
+    };
+
+    var ensureVisible = function(columnIndex, rowIndex) {
+        var sel = gridModel.selectedCell();
+        var top = gridModel.getRowTop(sel.y - gridModel.rowOffset());
+        if (top < gridModel.scrollTop()) {
+            gridModel.scrollTop(sel.y);
+        }
     };
 
     gridModel.rows = ko.computed(function() {
@@ -56,34 +62,25 @@ exports = module.exports = function(columns, makeRow) {
         });
     };
 
+    var wrap = function(val, min, max) {
+        return val >= max ? min :
+               val < min ? (max - 1):
+               val;
+    }
+
     gridModel.keyPressed = function(data, evt) {
         var s = gridModel.selectedCell();
         switch (evt.which) {
-            case 37: // left
-                gridModel.selectedCell({
-                    x: s.x - 1,
-                    y: s.y
-                });
-                break;
-            case 39: // right
-                gridModel.selectedCell({
-                    x: s.x + 1,
-                    y: s.y
-                });
-                break;
-            case 38: // up
-                gridModel.selectedCell({
-                    x: s.x,
-                    y: s.y - 1
-                });
-                break;
-            case 40: // down
-                gridModel.selectedCell({
-                    x: s.x,
-                    y: s.y + 1
-                });
-                break;
+            case 37: s.x--; break;
+            case 39: s.x++; break;
+            case 38: s.y--; break;
+            case 40: s.y++; break;
         }
+        gridModel.selectedCell({
+            x: wrap(s.x, 0, ko.unwrap(gridModel.columns).length),
+            y: wrap(s.y, 0, gridModel.rowCount())
+        });
+        ensureVisible(s.x, s.y);
     };
 
     return {
